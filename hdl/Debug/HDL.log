@@ -1,0 +1,7 @@
+﻿  dllmain.c
+  globals.c
+  lowlevelkeyboardproc.c
+  refreshhotkeys.c
+  Generating Code...
+     Creating library C:\Users\Govind\Source\Repos\HotDig\Debug\HDL.lib and object C:\Users\Govind\Source\Repos\HotDig\Debug\HDL.exp
+  HDL.vcxproj -> C:\Users\Govind\Source\Repos\HotDig\Debug\HDL.dll

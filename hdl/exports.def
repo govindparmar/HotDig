@@ -1,0 +1,4 @@
+LIBRARY HDL
+EXPORTS
+	LowLevelKeyboardProc
+	RefreshHotkeys
