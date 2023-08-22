@@ -57,7 +57,7 @@ LRESULT CALLBACK LowLevelKeyboardProc(_In_ INT nCode, _In_ WPARAM wParam, _In_ L
 		case VK_LCONTROL:
 		case VK_RCONTROL:
 			EnterCriticalSection(&g_CS);
-			g_fCtrl = TRUE;
+			g_fCtrl = FALSE;
 			LeaveCriticalSection(&g_CS);
 			break;
 		}
