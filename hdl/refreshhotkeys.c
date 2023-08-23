@@ -52,6 +52,16 @@ BOOL WINAPI RefreshHotkeys()
 			goto cleanup;
 		}
 
+		// 0: Disabled
+		// 1: ShellExecuteW
+		// 2: CreateProcessW
+		// 3: _wsystem
+		dwCB = sizeof(DWORD);
+		ls = RegQueryValueExW(hKey, L"CallType", NULL, NULL, (LPBYTE) &g_Hotkeys[i].dwCallType, &dwCB);
+		if (ls != ERROR_SUCCESS)
+		{
+			goto cleanup;
+		}
 	}
 
 	ls = ERROR_SUCCESS;

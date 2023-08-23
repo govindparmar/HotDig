@@ -34,10 +34,41 @@ LRESULT CALLBACK LowLevelKeyboardProc(_In_ INT nCode, _In_ WPARAM wParam, _In_ L
 			INT i = kbdhs.vkCode - '0';
 			if (g_fAlt && g_fCtrl)
 			{
-				ShellExecuteW(NULL, g_Hotkeys[i].wszVerb,
-					g_Hotkeys[i].wszPath, 
-					g_Hotkeys[i].wszArguments,
-					g_Hotkeys[i].wszDirectory, SW_SHOWNORMAL);
+				switch (g_Hotkeys[i].dwCallType)
+				{
+				case HOTKEY_ENTRY_CALL_SHELLEXECUTEW:
+				{
+					ShellExecuteW(NULL, g_Hotkeys[i].wszVerb,
+						g_Hotkeys[i].wszPath,
+						g_Hotkeys[i].wszArguments,
+						g_Hotkeys[i].wszDirectory, SW_SHOWNORMAL);
+				}
+				break;
+				case HOTKEY_ENTRY_CALL_CREATEPROCESSW:
+				{
+					PROCESS_INFORMATION pi;
+					STARTUPINFOW si;
+
+					ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
+					ZeroMemory(&si, sizeof(STARTUPINFOW));
+					si.cb = sizeof(STARTUPINFOW);
+
+					if (CreateProcessW(g_Hotkeys[i].wszPath, g_Hotkeys[i].wszArguments, NULL, NULL, FALSE, CREATE_NEW_PROCESS_GROUP | CREATE_UNICODE_ENVIRONMENT, NULL, g_Hotkeys[i].wszDirectory, &si, &pi))
+					{
+						CloseHandle(pi.hThread);
+						CloseHandle(pi.hProcess);
+					}
+				}
+				break;
+				case HOTKEY_ENTRY_CALL__WSYSTEM:
+				{
+					g_wszSystemCallString[0] = L'\0';
+					StringCchPrintfW(g_wszSystemCallString, WSYSTEM_STRING_CCH, L"cd %s && %s %s", g_Hotkeys[i].wszDirectory, g_Hotkeys[i].wszPath, g_Hotkeys[i].wszArguments);
+					_wsystem(g_wszSystemCallString);
+					
+				}
+				break;
+				}
 			}
 		}
 	}
