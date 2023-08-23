@@ -30,6 +30,17 @@ BOOL WINAPI RefreshHotkeys()
 			goto cleanup;
 		}
 
+		// 0: Disabled
+		// 1: ShellExecuteW
+		// 2: CreateProcessW
+		// 3: _wsystem
+		dwCB = sizeof(DWORD);
+		ls = RegQueryValueExW(hKey, L"CallType", NULL, NULL, (LPBYTE)&g_Hotkeys[i].dwCallType, &dwCB);
+		if (ls != ERROR_SUCCESS)
+		{
+			goto cleanup;
+		}
+
 		dwCB = MAX_PATH * sizeof(WCHAR);
 		ls = RegQueryValueExW(hKey, L"Directory", NULL, NULL, (LPBYTE)g_Hotkeys[i].wszDirectory, &dwCB);
 		if (ls != ERROR_SUCCESS)
@@ -37,8 +48,17 @@ BOOL WINAPI RefreshHotkeys()
 			goto cleanup;
 		}
 
-		dwCB = 500 * sizeof(WCHAR);
-		ls = RegQueryValueExW(hKey, L"Arguments", NULL, NULL, (LPBYTE)g_Hotkeys[i].wszArguments, &dwCB);
+		if (HOTKEY_ENTRY_CALL_CREATEPROCESSW == g_Hotkeys[i].dwCallType)
+		{
+			dwCB = 499 * sizeof(WCHAR);
+			g_Hotkeys[i].wszArguments[0] = L' ';
+			ls = RegQueryValueExW(hKey, L"Arguments", NULL, NULL, (LPBYTE) (g_Hotkeys[i].wszArguments + 1), &dwCB);
+		}
+		else
+		{
+			dwCB = 500 * sizeof(WCHAR);
+			ls = RegQueryValueExW(hKey, L"Arguments", NULL, NULL, (LPBYTE) g_Hotkeys[i].wszArguments, &dwCB);
+		}
 		if (ls != ERROR_SUCCESS)
 		{
 			goto cleanup;
@@ -47,17 +67,6 @@ BOOL WINAPI RefreshHotkeys()
 
 		dwCB = 10 * sizeof(WCHAR);
 		ls = RegQueryValueExW(hKey, L"Verb", NULL, NULL, (LPBYTE)g_Hotkeys[i].wszVerb, &dwCB);
-		if (ls != ERROR_SUCCESS)
-		{
-			goto cleanup;
-		}
-
-		// 0: Disabled
-		// 1: ShellExecuteW
-		// 2: CreateProcessW
-		// 3: _wsystem
-		dwCB = sizeof(DWORD);
-		ls = RegQueryValueExW(hKey, L"CallType", NULL, NULL, (LPBYTE) &g_Hotkeys[i].dwCallType, &dwCB);
 		if (ls != ERROR_SUCCESS)
 		{
 			goto cleanup;

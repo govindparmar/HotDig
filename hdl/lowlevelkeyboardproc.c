@@ -48,7 +48,7 @@ LRESULT CALLBACK LowLevelKeyboardProc(_In_ INT nCode, _In_ WPARAM wParam, _In_ L
 				{
 					PROCESS_INFORMATION pi;
 					STARTUPINFOW si;
-
+					
 					ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
 					ZeroMemory(&si, sizeof(STARTUPINFOW));
 					si.cb = sizeof(STARTUPINFOW);
@@ -63,7 +63,7 @@ LRESULT CALLBACK LowLevelKeyboardProc(_In_ INT nCode, _In_ WPARAM wParam, _In_ L
 				case HOTKEY_ENTRY_CALL__WSYSTEM:
 				{
 					g_wszSystemCallString[0] = L'\0';
-					StringCchPrintfW(g_wszSystemCallString, WSYSTEM_STRING_CCH, L"cd %s && %s %s", g_Hotkeys[i].wszDirectory, g_Hotkeys[i].wszPath, g_Hotkeys[i].wszArguments);
+					StringCchPrintfW(g_wszSystemCallString, WSYSTEM_STRING_CCH, L"cd /D %s && %s %s", g_Hotkeys[i].wszDirectory, g_Hotkeys[i].wszPath, g_Hotkeys[i].wszArguments);
 					_wsystem(g_wszSystemCallString);
 					
 				}
