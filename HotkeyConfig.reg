@@ -5,6 +5,7 @@
 ; 1 - ShellExecuteW
 ; 2 - CreateProcessW
 ; 3 - _wystsem
+; "Verb" value is only relevant when CallType is 1 (ShellExecuteW)
 
 [HKEY_CURRENT_USER\Software\GovindParmar\HotDig]
 
